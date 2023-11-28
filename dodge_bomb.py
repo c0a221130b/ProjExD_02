@@ -54,7 +54,7 @@ def main():
     bb_imgs = []
     for r in range(1, 11):
         bb_img = pg.Surface((20*r, 20*r))  # 練習1 透明のsurfaceをつける
-        pg.draw.circle(bb_img, (255, 0, 0), (10*r,10*r), 10*r)
+        pg.draw.circle(bb_img, (255, 0, 0), (10*r, 10*r), 10*r)  #空白の統一 #1
         bb_img.set_colorkey(0,0)
         bb_imgs.append(bb_img)
         
@@ -76,8 +76,8 @@ def main():
 
         if kk_rct.colliderect(bb_rct):  #練習5 こうかとんと爆弾の衝突判定 追加機能3
             flag = 1
-            
-        
+
+
         key_lst = pg.key.get_pressed()
         sum_move = [0, 0]
         for k, tpl in delta.items():
@@ -90,17 +90,16 @@ def main():
         for k, itm in kk_rotozoom.items():  # 追加機能1
             if sum_move == list(k):
                 kk_img = itm
-                
+
         kk_rct.move_ip(sum_move[0], sum_move[1])  # 練習3 こうかとん移動
-        
+
         if flag:  # 追加機能3
             kk_img = kk_over_img
-            
         screen.blit(kk_img, kk_rct)  # こうかとんをblit
-        
+
         if check_bound(kk_rct) != (True, True):  # 練習4 こうかとんの位置判定
             kk_rct.move_ip(-sum_move[0], -sum_move[1])
-        
+
         # 追加機能2
         bb_img = bb_imgs[min(tmr//100, 9)]
         
@@ -109,10 +108,10 @@ def main():
             vx *= -1
         if not tate:
             vy *= -1
-        
+
         bb_rct.move_ip(vx, vy)  # 練習2 爆弾
         screen.blit(bb_img, bb_rct)
-        
+
         pg.display.update()
         tmr += 1
         clock.tick(60)
