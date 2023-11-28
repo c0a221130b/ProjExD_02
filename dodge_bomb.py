@@ -32,6 +32,18 @@ def main():
     screen = pg.display.set_mode((WIDTH, HEIGHT))
     bg_img = pg.image.load("ex02/fig/pg_bg.jpg")
     kk_img = pg.image.load("ex02/fig/3.png")
+
+    kk_rotozoom = {  #追加機能1
+        (-5, 0): pg.transform.rotozoom(kk_img, 0, 2.0),
+        (-5, -5): pg.transform.rotozoom(kk_img, -45, 2.0),
+        (0, -5): pg.transform.rotozoom(pg.transform.flip(kk_img, True, False), 90, 2.0),
+        (+5, -5): pg.transform.rotozoom(pg.transform.flip(kk_img, True, False), 45, 2.0),
+        (+5, 0): pg.transform.rotozoom(pg.transform.flip(kk_img, True, False), 0, 2.0),
+        (+5, +5): pg.transform.rotozoom(pg.transform.flip(kk_img, True, False), -45, 2.0),
+        (0, +5): pg.transform.rotozoom(pg.transform.flip(kk_img, True, False), -90, 2.0),
+        (-5, +5): pg.transform.rotozoom(kk_img, 45, 2.0)
+    }
+
     kk_img = pg.transform.rotozoom(kk_img, 0, 2.0)
     kk_rct = kk_img.get_rect()
     kk_rct.center = 900, 400
@@ -60,8 +72,12 @@ def main():
             if key_lst[k]:  # キーが押されたら
                 sum_move[0] += tpl[0]
                 sum_move[1] += tpl[1]
-                
+
         screen.blit(bg_img, [0, 0])  #背景
+
+        for k, itm in kk_rotozoom.items():  # 追加機能1
+            if sum_move == list(k):
+                kk_img = itm
         kk_rct.move_ip(sum_move[0], sum_move[1])  # 練習3 こうかとん移動
         screen.blit(kk_img, kk_rct)  # こうかとんをblit
         
