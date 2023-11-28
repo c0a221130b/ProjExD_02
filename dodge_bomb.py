@@ -42,7 +42,8 @@ def main():
     bb_rct.centerx = random.randint(0, WIDTH)
     bb_rct.centery = random.randint(0, WIDTH)
     vx, vy = +5, +5
-    
+
+
     clock = pg.time.Clock()
     tmr = 0
     while True:
@@ -50,6 +51,9 @@ def main():
             if event.type == pg.QUIT: 
                 return
 
+        if kk_rct.colliderect(bb_rct):  #練習5 こうかとんと爆弾の衝突判定
+            print("Game Over")
+            return
         key_lst = pg.key.get_pressed()
         sum_move = [0, 0]
         for k, tpl in delta.items():
@@ -64,7 +68,7 @@ def main():
         if check_bound(kk_rct) != (True, True):  # 練習4 こうかとんの位置判定
             kk_rct.move_ip(-sum_move[0], -sum_move[1])
             
-        yoko, tate = check_bound(bb_rct)  # 練習 爆弾の位置判定
+        yoko, tate = check_bound(bb_rct)  # 練習4 爆弾の位置判定
         if not yoko:
             vx *= -1
         if not tate:
