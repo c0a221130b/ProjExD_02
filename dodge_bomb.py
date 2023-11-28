@@ -43,21 +43,30 @@ def main():
         (0, +5): pg.transform.rotozoom(pg.transform.flip(kk_img, True, False), -90, 2.0),
         (-5, +5): pg.transform.rotozoom(kk_img, 45, 2.0)
     }
-
+        
     kk_img = pg.transform.rotozoom(kk_img, 0, 2.0)
     kk_rct = kk_img.get_rect()
     kk_rct.center = 900, 400
-    bb_img = pg.Surface((20, 20))  # 練習1 透明のsurfaceをつける
-    bb_img.set_colorkey(0,0)
-    pg.draw.circle(bb_img, (255, 0, 0), (10,10), 10)
-    bb_rct = bb_img.get_rect()  # 爆弾SurfaceのRectを抽出する
+    
+    # 追加機能2
+    bb_imgs = []
+    for r in range(1, 11):
+        bb_img = pg.Surface((20*r, 20*r))  # 練習1 透明のsurfaceをつける
+        pg.draw.circle(bb_img, (255, 0, 0), (10*r,10*r), 10*r)
+        bb_img.set_colorkey(0,0)
+        bb_imgs.append(bb_img)
+        
+    bb_rct = bb_imgs[0].get_rect()  # 爆弾SurfaceのRectを抽出する
     bb_rct.centerx = random.randint(0, WIDTH)
     bb_rct.centery = random.randint(0, WIDTH)
+    
     vx, vy = +5, +5
 
 
     clock = pg.time.Clock()
     tmr = 0
+    print(bb_imgs)
+
     while True:
         for event in pg.event.get():
             if event.type == pg.QUIT: 
@@ -78,17 +87,22 @@ def main():
         for k, itm in kk_rotozoom.items():  # 追加機能1
             if sum_move == list(k):
                 kk_img = itm
+                
         kk_rct.move_ip(sum_move[0], sum_move[1])  # 練習3 こうかとん移動
         screen.blit(kk_img, kk_rct)  # こうかとんをblit
         
         if check_bound(kk_rct) != (True, True):  # 練習4 こうかとんの位置判定
             kk_rct.move_ip(-sum_move[0], -sum_move[1])
-            
+        
+        # 追加機能2
+        bb_img = bb_imgs[min(tmr//50, 9)]
+        
         yoko, tate = check_bound(bb_rct)  # 練習4 爆弾の位置判定
         if not yoko:
             vx *= -1
         if not tate:
             vy *= -1
+        
         bb_rct.move_ip(vx, vy)  # 練習2 爆弾
         screen.blit(bb_img, bb_rct)
         
